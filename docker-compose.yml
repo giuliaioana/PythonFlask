@@ -1,0 +1,42 @@
+version: '3.8'
+services: 
+  app: 
+    container_name: app
+    environment:
+      APP_ENVIRONMENT: docker
+    links:
+      - mysql
+    image: giuliaioana/python_flask_app:0.3
+    ports: 
+      - 5000:5000
+    volumes: 
+      - ./src/main.py:/main.py:rw
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: main
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: root 
+    ports:
+      - "3306:3306"
+    volumes:
+      - "./scripts/schema.sql:/docker-entrypoint-initdb.d/1.sql"
+      - "./scripts/data.sql:/docker-entrypoint-initdb.d/2.sql"
+  # db: 
+  #   image: mysql:5.7.22
+  #   restart: always
+  #   environment: 
+  #     MYSQL_DATABASE: main
+  #     MYSQL_USER: root
+  #     MYSQL_PASSWORD: root
+  #     MYSQL_ROOT_PASSWORD: root 
+  #   volumes: 
+  #     - .dbdata:/var/lib/mysql
+  #   ports: 
+  #     - 33067:3306

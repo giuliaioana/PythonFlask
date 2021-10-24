@@ -1,0 +1,3 @@
+USE main;
+INSERT INTO Persons
+VALUES('1','LAURENTIU')
