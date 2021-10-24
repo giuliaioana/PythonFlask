@@ -3,6 +3,7 @@ from flask import Flask, request
 import pymysql
 import time
 import os
+import json
 
 environment = os.getenv("APP_ENVIRONMENT", "local")
 
@@ -32,6 +33,7 @@ def open_db_connection() -> None:
 def sql(conn, query) :
     cur = conn.cursor()
     cur.execute(query)
+    conn.commit()
     return cur
 
 api = Flask(__name__)
@@ -39,15 +41,18 @@ api = Flask(__name__)
 @api.route('/')
 def index():
     query = "SELECT * FROM Persons"
-    for id, lastname in sql(con,query) :
-        return repr({id:lastname})
+    response = sql(con,query)
+    output = []
+    for id, lastname in response.fetchall() :
+        output.append({"id": id, "name": lastname})
+    return json.dumps(output)
 
 @api.route('/products', methods=['POST'])
 def post_products():
     data = request.get_json(force=True)
-    query = f"""INSERT INTO Persons VALUES({data["id"]},'{data["name"]}')"""
+    query = f"""INSERT INTO Persons VALUES({data["id"]},'{data["name"]}');"""
     sql(con,query)
-    return 'Product successully added', 200 
+    return f'Product successully added, query: {query}', 200 
 
 
 
