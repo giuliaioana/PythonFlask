@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from flask import Flask
+from flask import Flask, request
 import pymysql
 import time
 import os
@@ -32,16 +32,22 @@ def open_db_connection() -> None:
 def sql(conn, query) :
     cur = conn.cursor()
     cur.execute(query)
-    for id, lastname in cur.fetchall() :
-
-        return {id:lastname}
+    return cur
 
 api = Flask(__name__)
 
 @api.route('/')
 def index():
     query = "SELECT * FROM Persons"
-    return repr(sql(con,query))
+    for id, lastname in sql(con,query) :
+        return repr({id:lastname})
+
+@api.route('/products', methods=['POST'])
+def post_products():
+    data = request.get_json(force=True)
+    query = f"""INSERT INTO Persons VALUES({data["id"]},'{data["name"]}')"""
+    sql(con,query)
+    return 'Product successully added', 200 
 
 
 
