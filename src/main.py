@@ -47,10 +47,19 @@ def index():
         output.append({"id": id, "name": lastname})
     return json.dumps(output)
 
+@api.route('/products', methods=['GET'])
+def get_products():
+    query = "SELECT * FROM Products"
+    response = sql(con,query)
+    output = []
+    for id, lastname, price in response.fetchall() :
+        output.append({"id": id, "name": lastname, "price":price})
+    return json.dumps(output)
+
 @api.route('/products', methods=['POST'])
 def post_products():
     data = request.get_json(force=True)
-    query = f"""INSERT INTO Persons VALUES({data["id"]},'{data["name"]}');"""
+    query = f"""INSERT INTO Products VALUES({data["id"]},'{data["name"]}', {data["price"]});"""
     sql(con,query)
     return f'Product successully added, query: {query}', 200 
 
