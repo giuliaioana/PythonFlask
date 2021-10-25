@@ -47,6 +47,7 @@ def index():
         output.append({"id": id, "name": lastname})
     return json.dumps(output)
 
+
 @api.route('/products', methods=['GET'])
 def get_products():
     query = "SELECT * FROM Products"
@@ -63,6 +64,58 @@ def post_products():
     sql(con,query)
     return f'Product successully added, query: {query}', 200 
 
+
+@api.route('/products/<int:id>', methods=['GET'])
+def get_product_id(id):
+   query = f"""SELECT * FROM Products WHERE ProductID={id};"""
+   response = sql(con,query)
+   output = []
+   for id, lastname, price in response.fetchall() :
+        output.append({"id": id, "name": lastname, "price":price})
+   return json.dumps(output) 
+
+
+@api.route('/products/<int:id>', methods=['PUT'])
+def put_product_id(id):
+   data = request.get_json(force=True)
+   query = f"""UPDATE Products SET Price = {data["price"]} WHERE ProductID={id};"""
+   response = sql(con,query)
+   return f'Product with ID={id} successully updated, query: {query}', 200 
+
+
+@api.route('/carts', methods=['GET'])
+def get_carts():
+    query = "SELECT * FROM Carts"
+    response = sql(con,query)
+    output = []
+    for person_id, product_id in response.fetchall() :
+        output.append({"person_id": person_id, "product_id": product_id})
+    return json.dumps(output)
+
+@api.route('/carts', methods=['POST'])
+def add_products_in_carts():
+    data = request.get_json(force=True)
+    query = f"""INSERT INTO Carts VALUES({data["person_id"]},{data["product_id"]});"""
+    sql(con,query)
+    return f'Product successully added in cart , query: {query}', 200 
+
+
+@api.route('/carts/<int:id>', methods=['GET'])
+def get_cart_id(id):
+   query = f"""SELECT * FROM Carts WHERE PersonID={id};"""
+   response = sql(con,query)
+   output = []
+   for person_id, product_id in response.fetchall() :
+        output.append({"person_id": person_id, "product_id": product_id})
+   return json.dumps(output) 
+
+
+@api.route('/carts/<int:id>', methods=['PUT'])
+def put_cart_id(id):
+   data = request.get_json(force=True)
+   query = f"""INSERT INTO Carts VALUES({id},{data["product_id"]});"""
+   response = sql(con,query)
+   return f'Person with ID={id} successully added a product in cart, query: {query}', 200 
 
 
 if __name__ == '__main__':

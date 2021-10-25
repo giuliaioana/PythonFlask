@@ -54,3 +54,46 @@ Expected output:
 <p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.</p>
 
 ```
+
+### 4. Requests examples: 
+
+```
+/products/ - GET, POST
+
+GET: 
+curl localhost:5000/products
+
+POST: 
+curl -X POST -H "Content-Type: application/json" -d '{"id": 4,"name": "pix", "price": "10"}' http://localhost:5000/products
+
+
+
+/products/<product_id>/  - GET, PUT 
+
+GET:
+curl localhost:5000/products/1
+
+PUT: 
+curl -X PUT -H "Content-Type: application/json" -d '{"price": "100"}' http://localhost:5000/products/1
+
+
+
+/shopping_carts/ - GET, POST 
+
+GET: 
+curl localhost:5000/carts
+
+POST:
+curl -X POST -H "Content-Type: application/json" -d '{"person_id": 2,"product_id": 1}' http://localhost:5000/carts
+
+
+
+/shopping_carts/<cart_id>/ - GET, PUT
+
+GET: 
+curl localhost:5000/carts/1
+
+PUT:
+curl -X PUT -H "Content-Type: application/json" -d '{"product_id": "3"}' http://localhost:5000/carts/1
+
+```
