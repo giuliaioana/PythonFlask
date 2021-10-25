@@ -5,6 +5,7 @@ import time
 import os
 import json
 
+
 environment = os.getenv("APP_ENVIRONMENT", "local")
 
 if environment == "local":
@@ -35,6 +36,7 @@ def sql(conn, query) :
     cur.execute(query)
     conn.commit()
     return cur
+
 
 api = Flask(__name__)
 
