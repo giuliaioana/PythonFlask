@@ -1,4 +1,10 @@
-user: admin
-hostname: localhost
-password: admin
-db: main
+default:
+  user: admin
+  hostname: localhost
+  password: admin
+  db: main
+docker:
+  user: admin
+  hostname: mysql
+  password: admin
+  db: main

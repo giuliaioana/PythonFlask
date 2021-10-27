@@ -7,11 +7,12 @@ import json
 import yaml
 import sys
 from flask_sqlalchemy import SQLAlchemy 
+from config import settings
 pymysql.install_as_MySQLdb()
 
 api = Flask(__name__)
 
-api.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://admin:admin@localhost/main'
+api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{settings.user}:{settings.password}@{settings.hostname}/{settings.db}'
 db = SQLAlchemy(api)
 
 class Products(db.Model):
@@ -37,47 +38,6 @@ class Persons(db.Model):
 db.create_all()
 
 
-with open("settings.yaml", "r") as yamlfile:
-    config = yaml.load(yamlfile, Loader=yaml.FullLoader)
-    print("Read successful")
-
-user = config.get("user")
-password = config.get("password")
-db = config.get("db")
-hostname = config.get("hostname")
-
-environment = os.getenv("APP_ENVIRONMENT", "local")
-
-if environment == "local":
-    hostname = "localhost"
-else: 
-    hostname = "mysql"
-
-
-con = None
-def open_db_connection() -> None:
-    retry = 0   
-    while retry <=5:
-        try:
-            global con
-            con = pymysql.connect(host=hostname, user=f"{user}", passwd=f"{password}", db=f"{db}" )
-            break
-        except Exception as error:
-            print(error)
-            retry += 1
-            time.sleep(retry*5)
-    
-    if retry == 6:
-        raise ValueError(f"Db connection failed after max retry: {retry}")
-
-
-# Simple routine to run a query on a database and print the results:
-def sql(conn, query) :
-    cur = conn.cursor()
-    cur.execute(query)
-    conn.commit()
-    return cur
-
 # @api.route('/')
 
 # def getproductitem():
@@ -87,12 +47,18 @@ def sql(conn, query) :
 #     db.session.add(products)
 #     db.session.commit()
 
+@api.route('/persons')
 def index():
-    query = "SELECT * FROM Persons"
-    response = sql(con,query)
+    # query = "SELECT * FROM Persons"
+    # response = sql(con,query)
     output = []
-    for id, lastname in response.fetchall() :
-        output.append({"id": id, "name": lastname})
+    for person in Persons.query.all():
+        output.append({"id": person.PersonID, "name": person.LastName})
+    # print(type(data))
+    # print(*data)
+    # # output = []
+    # # for id, lastname in response.fetchall() :
+    # #     output.append({"id": id, "name": lastname})
     return json.dumps(output)
 
 
@@ -167,7 +133,7 @@ def put_cart_id(id):
 
 
 if __name__ == '__main__':
-    open_db_connection()
+    #open_db_connection()
     api.run(debug=True, host='0.0.0.0')
     print('test')
-    con.close()
+    #con.close()
