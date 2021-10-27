@@ -6,6 +6,36 @@ import os
 import json
 import yaml
 import sys
+from flask_sqlalchemy import SQLAlchemy 
+pymysql.install_as_MySQLdb()
+
+api = Flask(__name__)
+
+api.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://admin:admin@localhost/main'
+db = SQLAlchemy(api)
+
+class Products(db.Model):
+    __tablename__='Products'
+    ProductID = db.Column(db.Integer,primary_key=True)
+    ProductName = db.Column(db.String(64))
+    Price = db.Column(db.Integer,nullable=False)
+    #cartitems = db.relationship('Carts', backref='Products')
+    def __repr__(self):
+        return f'ProductName {self.ProductName}'
+
+class Carts(db.Model):
+    __tablename__='Carts'
+    ID = db.Column(db.Integer,primary_key=True)
+    PersonID = db.Column(db.Integer, db.ForeignKey('Persons.PersonID'))
+    ProductID = db.Column(db.Integer, db.ForeignKey('Products.ProductID'))
+
+class Persons(db.Model):
+    __tablename__='Persons'
+    PersonID = db.Column(db.Integer, primary_key=True)
+    LastName = db.Column(db.String(64))
+
+db.create_all()
+
 
 with open("settings.yaml", "r") as yamlfile:
     config = yaml.load(yamlfile, Loader=yaml.FullLoader)
@@ -48,10 +78,15 @@ def sql(conn, query) :
     conn.commit()
     return cur
 
+# @api.route('/')
 
-api = Flask(__name__)
+# def getproductitem():
+#     itemid = products.id
+#     productname = products.name
+#     productname = Carts(product_id=itemid)
+#     db.session.add(products)
+#     db.session.commit()
 
-@api.route('/')
 def index():
     query = "SELECT * FROM Persons"
     response = sql(con,query)

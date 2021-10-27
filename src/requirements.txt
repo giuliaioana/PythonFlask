@@ -5,3 +5,4 @@ requests
 dynaconf
 pyyaml
 pyaml
+flask_sqlalchemy
