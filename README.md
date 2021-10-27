@@ -97,3 +97,19 @@ PUT:
 curl -X PUT -H "Content-Type: application/json" -d '{"product_id": "3"}' http://localhost:5000/carts/1
 
 ```
+
+### 5. Using CLI: 
+
+``` 
+Examples of commands: 
+
+If you want to get all the products from db: 
+./cli.py -m "GET" -t "products" 
+
+If you want to post products into db: 
+./cli.py --method "POST" --table "products" --data '{"id": 41,"name": "pix", "price": 10}'
+
+If you want to update a specific product from db:
+./cli.py --method "PUT" --table "products" --id 2 --data '{"price": 1010}'
+
+```

@@ -29,6 +29,10 @@ def call_request(table: str, id: str, data: dict, method: str = "GET") -> None:
     if (method == "GET") and (id !=None):
         response = requests.get(f"http://127.0.0.1:5000/{table}/{id}")
         logger.info(response.content)
+    if (method == "PUT") and (id !=None):
+        response = requests.put(f"http://127.0.0.1:5000/{table}/{id}", json=data)
+        logger.info(response.content)
+
     
 call_request(args.table,args.id,args.data,args.method)
 

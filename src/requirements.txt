@@ -1,6 +1,7 @@
 flask==2.0.2
 python-dotenv
-mysql-connector-python
-mysql-client
 pymysql
 requests
+dynaconf
+pyyaml
+pyaml

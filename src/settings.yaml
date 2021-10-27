@@ -1,0 +1,4 @@
+user: admin
+hostname: localhost
+password: admin
+db: main

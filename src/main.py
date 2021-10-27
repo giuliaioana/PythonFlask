@@ -4,7 +4,17 @@ import pymysql
 import time
 import os
 import json
+import yaml
+import sys
 
+with open("settings.yaml", "r") as yamlfile:
+    config = yaml.load(yamlfile, Loader=yaml.FullLoader)
+    print("Read successful")
+
+user = config.get("user")
+password = config.get("password")
+db = config.get("db")
+hostname = config.get("hostname")
 
 environment = os.getenv("APP_ENVIRONMENT", "local")
 
@@ -13,13 +23,14 @@ if environment == "local":
 else: 
     hostname = "mysql"
 
+
 con = None
 def open_db_connection() -> None:
     retry = 0   
     while retry <=5:
         try:
             global con
-            con = pymysql.connect(host=hostname, user="admin", passwd="admin", db="main" )
+            con = pymysql.connect(host=hostname, user=f"{user}", passwd=f"{password}", db=f"{db}" )
             break
         except Exception as error:
             print(error)
@@ -123,4 +134,5 @@ def put_cart_id(id):
 if __name__ == '__main__':
     open_db_connection()
     api.run(debug=True, host='0.0.0.0')
+    print('test')
     con.close()
