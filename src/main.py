@@ -4,14 +4,13 @@ import pymysql
 import time
 import os
 import json
-import yaml
 import sys
 from flask_sqlalchemy import SQLAlchemy 
 from config import settings
 pymysql.install_as_MySQLdb()
 
 api = Flask(__name__)
-
+print(f'mysql://{settings.user}:{settings.password}@{settings.hostname}/{settings.db}')
 api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{settings.user}:{settings.password}@{settings.hostname}/{settings.db}'
 db = SQLAlchemy(api)
 

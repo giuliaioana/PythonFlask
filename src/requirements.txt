@@ -3,6 +3,4 @@ python-dotenv
 pymysql
 requests
 dynaconf
-pyyaml
-pyaml
 flask_sqlalchemy
