@@ -38,15 +38,6 @@ class Persons(db.Model):
 db.create_all()
 
 
-# @api.route('/')
-
-# def getproductitem():
-#     itemid = products.id
-#     productname = products.name
-#     productname = Carts(product_id=itemid)
-#     db.session.add(products)
-#     db.session.commit()
-
 @api.route('/persons')
 def index():
     # query = "SELECT * FROM Persons"
@@ -64,72 +55,113 @@ def index():
 
 @api.route('/products', methods=['GET'])
 def get_products():
-    query = "SELECT * FROM Products"
-    response = sql(con,query)
+    # query = "SELECT * FROM Products"
+    # response = sql(con,query)
     output = []
-    for id, lastname, price in response.fetchall() :
-        output.append({"id": id, "name": lastname, "price":price})
+    for product in Products.query.all():
+        output.append({"id": product.ProductID, "name":product.ProductName, "price":product.Price})
+    # for id, lastname, price in response.fetchall() :
+    #     output.append({"id": id, "name": lastname, "price":price})
+    # return json.dumps(output)
     return json.dumps(output)
 
 @api.route('/products', methods=['POST'])
 def post_products():
-    data = request.get_json(force=True)
-    query = f"""INSERT INTO Products VALUES({data["id"]},'{data["name"]}', {data["price"]});"""
-    sql(con,query)
-    return f'Product successully added, query: {query}', 200 
+    data = request.get_json(force=True) # extract data from request 
+    # query = f"""INSERT INTO Products VALUES({data["id"]},'{data["name"]}', {data["price"]});"""
+    # sql(con,query)
+    # return f'Product successully added, query: {query}', 200 
+    product = Products(
+            ProductID=data["id"],
+            ProductName=data['name'],
+            Price=data["price"]
+        )
+    db.session.add(product)
+    db.session.commit()
+    return "Product successfully added", 200
+
 
 
 @api.route('/products/<int:id>', methods=['GET'])
 def get_product_id(id):
-   query = f"""SELECT * FROM Products WHERE ProductID={id};"""
-   response = sql(con,query)
+#    query = f"""SELECT * FROM Products WHERE ProductID={id};"""
+#    response = sql(con,query)
    output = []
-   for id, lastname, price in response.fetchall() :
-        output.append({"id": id, "name": lastname, "price":price})
+   product = Products.query.filter_by(ProductID ={id}).first()
+#    for id, lastname, price in response.fetchall() :
+#         output.append({"id": id, "name": lastname, "price":price})
+   output.append({"id": product.ProductID, "name":product.ProductName, "price":product.Price})
    return json.dumps(output) 
 
 
 @api.route('/products/<int:id>', methods=['PUT'])
 def put_product_id(id):
-   data = request.get_json(force=True)
-   query = f"""UPDATE Products SET Price = {data["price"]} WHERE ProductID={id};"""
-   response = sql(con,query)
-   return f'Product with ID={id} successully updated, query: {query}', 200 
+#    data = request.get_json(force=True)
+#    query = f"""UPDATE Products SET Price = {data["price"]} WHERE ProductID={id};"""
+#    response = sql(con,query)
+#    return f'Product with ID={id} successully updated, query: {query}', 200 
+    output=[]
+    data = request.get_json(force=True)
+    product = Products.query.filter_by(ProductID = {id}).first()
+    product.Price = data["price"]
+    db.session.commit()
+    return f'Product with ID={id} sucesfully updated', 200
+
 
 
 @api.route('/carts', methods=['GET'])
 def get_carts():
-    query = "SELECT * FROM Carts"
-    response = sql(con,query)
+    # query = "SELECT * FROM Carts"
+    # response = sql(con,query)
     output = []
-    for person_id, product_id in response.fetchall() :
-        output.append({"person_id": person_id, "product_id": product_id})
+    # for person_id, product_id in response.fetchall() :
+    #     output.append({"person_id": person_id, "product_id": product_id})
+    output = []
+    for cart in Carts.query.all():
+        output.append({"PersonID": cart.PersonID, "ProductID": cart.ProductID})
     return json.dumps(output)
+
 
 @api.route('/carts', methods=['POST'])
 def add_products_in_carts():
     data = request.get_json(force=True)
-    query = f"""INSERT INTO Carts VALUES({data["person_id"]},{data["product_id"]});"""
-    sql(con,query)
-    return f'Product successully added in cart , query: {query}', 200 
-
+    # query = f"""INSERT INTO Carts VALUES({data["person_id"]},{data["product_id"]});"""
+    # sql(con,query)
+    # return f'Product successully added in cart , query: {query}', 200 
+    cart = Carts(
+            ID = data["id"],
+            PersonID = data["person_id"],
+            ProductID = data["product_id"]          
+    )
+    db.session.add(cart)
+    db.session.commit()
+    return f"Product with id = {cart.ProductID} successfully added in cart", 200
 
 @api.route('/carts/<int:id>', methods=['GET'])
 def get_cart_id(id):
-   query = f"""SELECT * FROM Carts WHERE PersonID={id};"""
-   response = sql(con,query)
-   output = []
-   for person_id, product_id in response.fetchall() :
-        output.append({"person_id": person_id, "product_id": product_id})
-   return json.dumps(output) 
+#    query = f"""SELECT * FROM Carts WHERE PersonID={id};"""
+#    response = sql(con,query)
+#    output = []
+#    for person_id, product_id in response.fetchall() :
+#         output.append({"person_id": person_id, "product_id": product_id})
+#    return json.dumps(output) 
+    output = []
+    cart = Carts.query.filter_by(PersonID ={id}).first()
+    output.append({"ID": cart.ID, "ProductID": cart.ProductID, "PersonID": cart.PersonID})
+    return json.dumps(output)
 
 
 @api.route('/carts/<int:id>', methods=['PUT'])
 def put_cart_id(id):
-   data = request.get_json(force=True)
-   query = f"""INSERT INTO Carts VALUES({id},{data["product_id"]});"""
-   response = sql(con,query)
-   return f'Person with ID={id} successully added a product in cart, query: {query}', 200 
+#    data = request.get_json(force=True)
+#    query = f"""INSERT INTO Carts VALUES({id},{data["product_id"]});"""
+#    response = sql(con,query)
+#    return f'Person with ID={id} successully added a product in cart, query: {query}', 200 
+    cart = Carts.query.filter_by(PersonID = {id}).first()
+    data = request.get_json(force=True)
+    cart.ProductID = data["product_id"]
+    db.session.commit()
+    return f'Person with ID={id} successully added a product in cart', 200 
 
 
 if __name__ == '__main__':
