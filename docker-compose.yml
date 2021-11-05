@@ -6,7 +6,7 @@ services:
       ENV_FOR_DYNACONF: docker
     links:
       - mysql
-    image: giuliaioana/python_flask_app:0.14
+    image: giuliaioana/python_flask_app:latest
     ports: 
       - 5000:5000
     volumes: 
