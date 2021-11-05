@@ -4,3 +4,4 @@ pymysql
 requests
 dynaconf
 flask_sqlalchemy
+xmlrunner
