@@ -9,7 +9,7 @@ services:
     image: giuliaioana/python_flask_app:latest
     ports: 
       - 5000:5000
-    volumes: 
+    # volumes: 
     #  - ./src/main.py:/main.py:rw
     #  - ./src/settings.yaml:/settings.yaml:rw
     depends_on:
