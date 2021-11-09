@@ -2,6 +2,8 @@ version: '3.1'
 services: 
   app: 
     container_name: app
+    networks:
+      - application
     environment:
       ENV_FOR_DYNACONF: docker
     links:
@@ -19,6 +21,8 @@ services:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
     container_name: mysql
+    networks:
+      - application
     environment:
       MYSQL_DATABASE: main
       MYSQL_USER: admin
@@ -30,3 +34,7 @@ services:
     #   - "./scripts/schema.sql:/docker-entrypoint-initdb.d/1.sql"
     #   - "./scripts/data.sql:/docker-entrypoint-initdb.d/2.sql"
   
+networks:
+  application:
+    # Use a custom driver
+    driver: bridge
