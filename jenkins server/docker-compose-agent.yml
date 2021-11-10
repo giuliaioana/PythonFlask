@@ -1,0 +1,45 @@
+version: '3.1'
+services:
+  jenkins:
+    container_name: jenkins
+    image: giuliaioana/jenkins:0.1
+    ports:
+      - 8080:8080
+      - 50000:50000
+    volumes:
+      - ~/jenkins_home:/var/jenkins_home:rw
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+      - /usr/bin/docker:/usr/bin/docker
+      - /usr/local/bin/docker-compose:/usr/local/bin/docker-compose
+
+# creating an agent 
+
+# jenkins > manage jenkins > manage nodes > new node
+# node name = agent > permanent agent 
+# executors: 2
+# remote root: /var/jenkins_home
+# labels = agent 
+# launch method = launch agent by connecting it to the master 
+# ( ensure to have the port open in order to make the master reachable for the agents )
+# ( > manage jenkins > configure global security > agents > TCP port for inbound agents > fixed : 50000 ) 
+# ( > Agent controller security > enable agent > controller access control )
+# defaults for rest
+# select node from nodes list to get java launch opts w/secret hash
+# copy the secret, the jenkins url and the agent name and 
+# put them in command from below : -url YOUR_JENKINS_URL SECRET AGENT_NAME  
+
+
+# slave
+# docker run jenkins/jnlp-slave -url http://192.168.8.113:8080 <secret> <jenkins_slave>
+
+  agent:
+    container_name: agent
+    image: giuliaioana/agent:0.1
+	user: root 
+    command: -url http://10.3.103.114:8080 f310915adc5fa5558c564c7609773ddefa1119137765210f08ecf423d05a9cd8 agent
+    restart: always
+    volumes:
+      - ~/jenkins_home_agent:/var/jenkins_home:rw
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+      - /usr/bin/docker:/usr/bin/docker
+      - /usr/local/bin/docker-compose:/usr/local/bin/docker-compose

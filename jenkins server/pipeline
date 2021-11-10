@@ -1,0 +1,91 @@
+pipeline{
+	agent {
+        node {
+            label 'agent'
+            //customWorkspace '/some/other/path'
+        }
+    } 
+	
+	environment { 
+	    dockerImage = ''
+	    registry = 'giuliaioana/python_flask_app'
+	    registryCredential = 'dockerhub_id'
+	    ENV_FOR_DYNACONF = 'docker'
+	}
+	stages{
+		stage('Git Checkout'){
+			steps{
+				echo 'Checkout stage'
+				checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/giuliaioana/PythonFlask']]])
+			}
+		}
+		stage('Install dependencies'){
+		    steps{ 
+		        sh "ls -ltr"
+		        sh "pip install --upgrade pip"
+		        sh "pip install -r src/requirements.txt"
+		    }
+		}
+        stage('Lint Flake8') { 
+            steps {
+                sh "rm -rf flake-report"
+                sh "pip3 install flake8-html && mkdir flake-report"
+                sh "flake8 -vv --output-file=flake-out.html --format=html --htmldir=flake-report --exit-zero src/"
+                sh "pwd"
+                // publish html
+                publishHTML target: [
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: false,
+                    keepAll: true,
+                    reportDir: 'flake-report',
+                    reportFiles: 'index.html',
+                    reportName: 'Flake Report'
+                 ]
+            }
+        } 
+       
+		stage('Build Docker image'){
+			steps {
+                echo 'Starting to build docker image'
+                script { 
+                    dockerImage = docker.build("${env.registry}:latest","--build-arg file=settings.yaml .") 
+                }
+
+            }
+		}
+		stage('Deploy to stagging'){
+		    steps { 
+		        sh 'pwd'
+		        sh 'ls -ltr'
+		        //sh 'docker-compose up -d'
+		        sh "docker-compose up -d"
+		    }
+		}
+		stage('Test'){ 
+          steps { 
+                 sh 'ls -ltr'
+                 sh 'python3 src/test.py'
+            }
+            post {
+                always {
+                    junit 'test-reports/*.xml'
+                }
+            }
+        }
+		stage('Push our image') { 
+            steps { 
+                script { 
+                    docker.withRegistry( '', registryCredential ) { 
+                        dockerImage.push() 
+                    }
+                } 
+            }
+        } 
+        stage('Cleaning up') { 
+            steps { 
+                sh "docker rmi $registry:latest" 
+            }
+        } 
+
+	}
+ }
