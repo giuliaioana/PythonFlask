@@ -18,10 +18,10 @@ class TestHello(unittest.TestCase):
         self.assertEqual(rv.status, '200 OK')
         
 
-    def test_hello_name(self):
-        id = '1'
-        rv = self.app.get(f'/products/{id}')
-        self.assertEqual(rv.status, '200 OK')
+    # def test_hello_name(self):
+    #     id = '1'
+    #     rv = self.app.get(f'/products/{id}')
+    #     self.assertEqual(rv.status, '200 OK')
         
 
 if __name__ == '__main__':
