@@ -5,8 +5,10 @@ import time
 import os
 import json
 import sys
+import pika 
 from flask_sqlalchemy import SQLAlchemy 
 from config import settings
+
 pymysql.install_as_MySQLdb()
 
 
@@ -36,6 +38,28 @@ class Persons(db.Model):
     LastName = db.Column(db.String(64))
 
 db.create_all()
+
+# RabbitMQ integration 
+
+
+
+@api.route('/add-job/<cmd>')
+def add(cmd):
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
+    channel = connection.channel()
+    channel.queue_declare(queue='task_queue', durable=True)
+    channel.basic_publish(
+        exchange='',
+        routing_key='task_queue',
+        body=cmd,
+        properties=pika.BasicProperties(
+            delivery_mode=2,  # make message persistent
+        ))
+    connection.close()
+    return " [x] Sent: %s" % cmd
+
+
+# RabbitMQ finish integration 
 
 
 @api.route('/persons')

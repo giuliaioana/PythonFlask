@@ -113,3 +113,32 @@ If you want to update a specific product from db:
 ./cli.py --method "PUT" --table "products" --id 2 --data '{"price": 1010}'
 
 ```
+
+### 6. RabbitMQ
+
+```
+Run rabbitmq image: 
+docker run -d -p 5672:5672 -p 15672:15672 rabbitmq:3.6-management-alpine
+
+RabbitMQ management console:
+http://locahost:15672
+username and password : guest 
+
+To send messages to broker: 
+curl localhost:5000/add-job/hey
+
+Expected output: 
+[x] Sent: hey
+
+Check the job result: 
+docker logs giuliaioana/worker:latest
+
+Expected output: 
+ [*] Sleeping for  10  seconds.
+ [*] Connecting to server ...
+ [*] Waiting for messages.
+ [x] Received b'hey'
+hey there
+ [x] Done
+
+```
