@@ -42,21 +42,21 @@ db.create_all()
 # RabbitMQ integration 
 
 
-
-@api.route('/add-job/<cmd>')
-def add(cmd):
+@api.route('/add-job', methods=['POST'])
+def add():
+    data = request.get_json(force=True) # extract data from request 
     connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
     channel = connection.channel()
     channel.queue_declare(queue='task_queue', durable=True)
     channel.basic_publish(
         exchange='',
         routing_key='task_queue',
-        body=cmd,
+        body=json.dumps(data),
         properties=pika.BasicProperties(
             delivery_mode=2,  # make message persistent
         ))
     connection.close()
-    return " [x] Sent: %s" % cmd
+    return {"status_code":200, "message": data}
 
 
 # RabbitMQ finish integration 

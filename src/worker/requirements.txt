@@ -1,0 +1,9 @@
+flask==2.0.2
+python-dotenv
+pymysql
+requests
+dynaconf
+flask_sqlalchemy
+xmlrunner
+pika
+pymysql
