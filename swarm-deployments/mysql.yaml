@@ -12,10 +12,11 @@ services:
       MYSQL_ROOT_PASSWORD: root 
     ports:
       - "3306:3306"
-    placement:
-      constraints: [node.labels.BE == true]
-      preferences:
-        - spread: node.labels.BE
+    deploy:
+      placement:
+        constraints: [node.labels.BE == true]
+        preferences:
+          - spread: node.labels.BE
     # volumes:
     #   - "./scripts/schema.sql:/docker-entrypoint-initdb.d/1.sql"
     #   - "./scripts/data.sql:/docker-entrypoint-initdb.d/2.sql"

@@ -6,7 +6,8 @@ services:
     ports:
       - '5672:5672'
       - '15672:15672'
-    placement:
-      constraints: [node.labels.BE == true]
-      preferences:
-        - spread: node.labels.BE
+    deploy:
+      placement:
+        constraints: [node.labels.BE == true]
+        preferences:
+          - spread: node.labels.BE

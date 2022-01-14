@@ -9,7 +9,8 @@ services:
     environment:
       ENV_FOR_DYNACONF: docker
       SWARM: "True"
-    placement:
-      constraints: [node.labels.FE == true]
-      preferences:
-        - spread: node.labels.FE
+    deploy:
+      placement:
+        constraints: [node.labels.FE == true]
+        preferences:
+          - spread: node.labels.FE

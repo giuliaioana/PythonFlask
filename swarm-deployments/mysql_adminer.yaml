@@ -7,10 +7,11 @@ services:
       - 8080:80
     environment:
       - PMA_ARBITRARY=1
-    placement:
-      constraints: [node.labels.FE == true]
-      preferences:
-        - spread: node.labels.FE
+    deploy:
+      placement:
+        constraints: [node.labels.FE == true]
+        preferences:
+          - spread: node.labels.FE
 # networks:
 #   ubuntu_default:
 #     external: true
