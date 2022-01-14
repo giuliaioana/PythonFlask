@@ -5,10 +5,10 @@ services:
     #   - ubuntu_default
     environment:
       ENV_FOR_DYNACONF: docker
-    placement:
-      constraints: [node.labels.worker == true]
-      preferences:
-        - spread: node.labels.worker
+    # placement:
+    #   constraints: [node.labels.worker == true]
+    #   preferences:
+    #     - spread: node.labels.worker
     image: giuliaioana/python_flask_app:latest
     ports: 
       - 5000:5000
