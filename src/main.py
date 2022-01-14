@@ -11,11 +11,12 @@ from config import settings
 
 pymysql.install_as_MySQLdb()
 
-rabitmq_host = "rabbitmq_rabbitmq" if os.getenv("SWARM") else "rabbitmq"
+rabitmq_host = "ip-172-31-6-119" if os.getenv("SWARM") else "rabbitmq"
 
 api = Flask(__name__)
-print(f'mysql://{settings.user}:{settings.password}@{settings.hostname}/{settings.db}')
-host= f"{settings.hostname}_{settings.hostname}" if os.getenv("SWARM") else settings.hostname
+
+host= "ip-172-31-6-119" if os.getenv("SWARM") else settings.hostname
+
 api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{settings.user}:{settings.password}@{host}/{settings.db}'
 db = SQLAlchemy(api)
 

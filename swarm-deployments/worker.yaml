@@ -2,14 +2,14 @@ version: '3.1'
 services: 
   
   worker:
-    #build: worker
+    name: worker
     image: giuliaioana/worker:latest
-    # volumes:
-    #   - ./src/worker:/app
+    volumes:
+      - /home/ubuntu/PythonFlask/src/worker:/app
     environment:
       ENV_FOR_DYNACONF: docker
       SWARM: "True"
-    # placement:
-    #   constraints: [node.labels.worker == true]
-    #   preferences:
-    #     - spread: node.labels.worker
+    placement:
+      constraints: [node.labels.FE == true]
+      preferences:
+        - spread: node.labels.FE

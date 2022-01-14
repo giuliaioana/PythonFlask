@@ -1,19 +1,16 @@
 version: '3.1'
 services: 
   app: 
-    # networks:
-    #   - ubuntu_default
     environment:
       ENV_FOR_DYNACONF: docker
       SWARM: "True"
-
-    # placement:
-    #   constraints: [node.labels.worker == true]
-    #   preferences:
-    #     - spread: node.labels.worker
+    placement:
+      constraints: [node.labels.FE == true]
+      preferences:
+        - spread: node.labels.FE
     image: giuliaioana/python_flask_app:latest
     ports: 
       - 5000:5000
-    # volumes: 
-    #   - ./src/main.py:/main.py:rw
+    volumes: 
+      - /home/ubuntu/PythonFlask/src/main.py:/main.py:rw
       #- ./src/settings.yaml:/settings.yaml:rw

@@ -5,8 +5,8 @@ import json
 import pymysql.cursors
 import os
 
-hostname = "mysql_mysql" if os.getenv("SWARM") else "mysql"
-rabitmq_host = "rabbitmq_rabbitmq" if os.getenv("SWARM") else "rabbitmq"
+hostname = "ip-172-31-6-119" if os.getenv("SWARM") else "mysql"
+rabitmq_host = "ip-172-31-6-119" if os.getenv("SWARM") else "rabbitmq"
 # Connect to the database
 def get_con():
     mysq_connection = pymysql.connect(host=hostname,

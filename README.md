@@ -38,7 +38,7 @@ build the new image with next tag:
 ### 4. Run docker swarm 
 ```
 Start docker swarm:
-sudo docker swarm init --advertise-addr $INSTANCE_ID
+sudo docker swarm init --advertise-addr ip-172-31-4-85
 ```
 
 ```
@@ -73,8 +73,8 @@ docker stack rm stackdemo
 
 ```
 Add docker stack label:
-docker node update --label-add worker=true node2
-docker node update --label-add worker=true node3
+docker node update --label-add BE=true ip-172-31-6-119
+docker node update --label-add FE=true ip-172-31-7-35
 ```
 ### 5. Check if is running as expected:
 
