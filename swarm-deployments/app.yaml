@@ -1,0 +1,16 @@
+version: '3.1'
+services: 
+  app: 
+    container_name: app
+    # networks:
+    #   - ubuntu_default
+    environment:
+      ENV_FOR_DYNACONF: docker
+    links:
+      - mysql
+    image: giuliaioana/python_flask_app:latest
+    ports: 
+      - 5000:5000
+    volumes: 
+      - ./src/main.py:/main.py:rw
+      #- ./src/settings.yaml:/settings.yaml:rw

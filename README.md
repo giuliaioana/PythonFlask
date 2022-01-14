@@ -35,7 +35,27 @@ build the new image with next tag:
 
 ```
 
-### 3. Check if is running as expected:
+### 4. Run docker swarm 
+```
+Start docker swarm:
+sudo docker swarm init --advertise-addr $INSTANCE_ID
+Check nodes:
+docker node ls
+Leave swarm at the begining:
+sudo docker swarm leave --force
+Deploy compose in stack:
+docker stack deploy --compose-file docker-compose.yml stackdemo
+Check docker compose status:
+docker stack services stackdemo
+Remove docker stack:
+docker stack rm stackdemo
+Add docker stack label:
+docker node update --label-add app=true ip-10-0-1-21
+docker node update --label-add app=true ip-10-0-1-159
+# Install grafana worldmap panel
+#sudo docker exec -i grafana bash  -c \"grafana-cli plugins install grafana-worldmap-panel\"
+```
+### 5. Check if is running as expected:
 
 ```
 docker ps -a
@@ -55,7 +75,7 @@ Expected output:
 
 ```
 
-### 4. Requests examples: 
+### 6. Requests examples: 
 
 ```
 /products/ - GET, POST
@@ -98,7 +118,7 @@ curl -X PUT -H "Content-Type: application/json" -d '{"product_id": "3"}' http://
 
 ```
 
-### 5. Using CLI: 
+### 7. Using CLI: 
 
 ``` 
 Examples of commands: 
@@ -114,7 +134,7 @@ If you want to update a specific product from db:
 
 ```
 
-### 6. RabbitMQ
+### 8. RabbitMQ
 
 ```
 Run rabbitmq image: 

@@ -1,0 +1,19 @@
+version: '3.1'
+services: 
+
+  mysql:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: mysql
+    # networks:
+    #   - ubuntu_default
+    environment:
+      MYSQL_DATABASE: main
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: root 
+    ports:
+      - "3306:3306"
+    # volumes:
+    #   - "./scripts/schema.sql:/docker-entrypoint-initdb.d/1.sql"
+    #   - "./scripts/data.sql:/docker-entrypoint-initdb.d/2.sql"
