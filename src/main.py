@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from json.tool import main
 from flask import Flask, request
 import pymysql
 import time
@@ -9,40 +10,46 @@ import pika
 from flask_sqlalchemy import SQLAlchemy 
 from config import settings
 
-pymysql.install_as_MySQLdb()
+retry = 10
+while True:
+    try:
+        pymysql.install_as_MySQLdb()
 
-rabitmq_host = "ip-172-31-6-119" if os.getenv("SWARM") else "rabbitmq"
+        rabitmq_host = "ip-172-31-6-119" if os.getenv("SWARM") else "rabbitmq"
 
-api = Flask(__name__)
+        api = Flask(__name__)
 
-host= "ip-172-31-6-119" if os.getenv("SWARM") else settings.hostname
+        host= "ip-172-31-6-119" if os.getenv("SWARM") else settings.hostname
 
-api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{settings.user}:{settings.password}@{host}/{settings.db}'
-db = SQLAlchemy(api)
+        api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{settings.user}:{settings.password}@{host}/{settings.db}'
+        db = SQLAlchemy(api)
+        class Products(db.Model):
+            __tablename__='Products'
+            ProductID = db.Column(db.Integer,primary_key=True)
+            ProductName = db.Column(db.String(64))
+            Price = db.Column(db.Integer,nullable=False)
+            #cartitems = db.relationship('Carts', backref='Products')
+            def __repr__(self):
+                return f'ProductName {self.ProductName}'
 
-class Products(db.Model):
-    __tablename__='Products'
-    ProductID = db.Column(db.Integer,primary_key=True)
-    ProductName = db.Column(db.String(64))
-    Price = db.Column(db.Integer,nullable=False)
-    #cartitems = db.relationship('Carts', backref='Products')
-    def __repr__(self):
-        return f'ProductName {self.ProductName}'
+        class Carts(db.Model):
+            __tablename__='Carts'
+            ID = db.Column(db.Integer,primary_key=True)
+            PersonID = db.Column(db.Integer, db.ForeignKey('Persons.PersonID'))
+            ProductID = db.Column(db.Integer, db.ForeignKey('Products.ProductID'))
 
-class Carts(db.Model):
-    __tablename__='Carts'
-    ID = db.Column(db.Integer,primary_key=True)
-    PersonID = db.Column(db.Integer, db.ForeignKey('Persons.PersonID'))
-    ProductID = db.Column(db.Integer, db.ForeignKey('Products.ProductID'))
+        class Persons(db.Model):
+            __tablename__='Persons'
+            PersonID = db.Column(db.Integer, primary_key=True)
+            LastName = db.Column(db.String(64))
 
-class Persons(db.Model):
-    __tablename__='Persons'
-    PersonID = db.Column(db.Integer, primary_key=True)
-    LastName = db.Column(db.String(64))
-
-db.create_all()
-
-# RabbitMQ integration 
+        db.create_all()
+        # RabbitMQ integration 
+        break
+    except BaseException as error:
+        print("Error when connectiong to DB")
+        time.sleep(retry*retry)
+        retry-=1
 
 
 @api.route('/add-job', methods=['POST'])
@@ -203,7 +210,6 @@ def put_cart_id(id):
     cart.ProductID = data["product_id"]
     db.session.commit()
     return f'Person with ID={id} successully added a product in cart', 200 
-
 
 if __name__ == '__main__':
     #open_db_connection()
