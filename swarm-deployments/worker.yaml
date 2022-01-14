@@ -8,7 +8,7 @@ services:
     #   - ./src/worker:/app
     environment:
       ENV_FOR_DYNACONF: docker
-      SWARM: True
+      SWARM: "True"
     # placement:
     #   constraints: [node.labels.worker == true]
     #   preferences:
