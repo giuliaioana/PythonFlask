@@ -11,9 +11,11 @@ from config import settings
 
 pymysql.install_as_MySQLdb()
 
+rabitmq_host = "rabbitmq_rabbitmq" if os.getenv("SWARM") else "rabbitmq"
 
 api = Flask(__name__)
 print(f'mysql://{settings.user}:{settings.password}@{settings.hostname}/{settings.db}')
+host= f"{settings.hostname}_{settings.hostname}" if os.getenv("SWARM") else settings.hostname
 api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{settings.user}:{settings.password}@{settings.hostname}/{settings.db}'
 db = SQLAlchemy(api)
 
@@ -45,7 +47,7 @@ db.create_all()
 @api.route('/add-job', methods=['POST'])
 def add():
     data = request.get_json(force=True) # extract data from request 
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabitmq_host))
     channel = connection.channel()
     channel.queue_declare(queue='task_queue', durable=True)
     channel.basic_publish(

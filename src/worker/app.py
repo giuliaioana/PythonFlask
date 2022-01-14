@@ -3,10 +3,13 @@ import pika
 import time
 import json
 import pymysql.cursors
+import os
 
+hostname = "mysql_mysql" if os.getenv("SWARM") else "mysql"
+rabitmq_host = "rabbitmq_rabbitmq" if os.getenv("SWARM") else "rabbitmq"
 # Connect to the database
 def get_con():
-    mysq_connection = pymysql.connect(host='mysql',
+    mysq_connection = pymysql.connect(host=hostname,
                                 user='admin',
                                 password='admin',
                                 database='main',
@@ -18,7 +21,7 @@ print(' [*] Sleeping for ', sleepTime, ' seconds.')
 time.sleep(10)
 
 print(' [*] Connecting to server ...')
-connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
+connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabitmq_host))
 channel = connection.channel()
 channel.queue_declare(queue='task_queue', durable=True)
 
