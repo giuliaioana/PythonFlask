@@ -1,12 +1,16 @@
 version: '3.1'
 services: 
   phpmyadmin:
-      image: phpmyadmin
-      restart: always
-      ports:
-        - 8080:80
-      environment:
-        - PMA_ARBITRARY=1
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+    placement:
+      constraints: [node.labels.worker == true]
+      preferences:
+        - spread: node.labels.worker
 # networks:
 #   ubuntu_default:
 #     external: true

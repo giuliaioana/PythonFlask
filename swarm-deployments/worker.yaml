@@ -7,4 +7,8 @@ services:
     volumes:
       - ./src/worker:/app
     environment:
-      - PYTHONUNBUFFERED=1  
+      - PYTHONUNBUFFERED=1
+    placement:
+      constraints: [node.labels.worker == true]
+      preferences:
+        - spread: node.labels.worker

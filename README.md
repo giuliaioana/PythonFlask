@@ -53,11 +53,12 @@ sudo docker swarm leave --force
 
 ```
 Deploy compose in stack:
-docker stack deploy --compose-file swarm-deployments/app.yaml appdemo && \
-docker stack deploy --compose-file swarm-deployments/worker.yaml workerdemo && \
-docker stack deploy --compose-file swarm-deployments/rabbitmq.yaml rabbitmqdemo && \
-docker stack deploy --compose-file swarm-deployments/mysql_adminer.yaml mysql_adminerdemo && \
-docker stack deploy --compose-file swarm-deployments/mysql.yaml mysqldemo 
+docker stack deploy --compose-file swarm-deployments/mysql.yaml mysql && \
+sleep 30 && \
+docker stack deploy --compose-file swarm-deployments/app.yaml app && \
+docker stack deploy --compose-file swarm-deployments/worker.yaml worker && \
+docker stack deploy --compose-file swarm-deployments/rabbitmq.yaml rabbitmq && \
+docker stack deploy --compose-file swarm-deployments/mysql_adminer.yaml mysql_adminer
 ```
 
 ```
@@ -72,8 +73,8 @@ docker stack rm stackdemo
 
 ```
 Add docker stack label:
-docker node update --label-add app=true ip-10-0-1-21
-docker node update --label-add app=true ip-10-0-1-159
+docker node update --label-add worker=true node2
+docker node update --label-add worker=true node3
 ```
 ### 5. Check if is running as expected:
 
