@@ -4,8 +4,8 @@ services:
   worker:
     #build: worker
     image: giuliaioana/worker:latest
-    volumes:
-      - ./src/worker:/app
+    # volumes:
+    #   - ./src/worker:/app
     environment:
       - PYTHONUNBUFFERED=1
     # placement:
