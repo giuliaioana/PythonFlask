@@ -11,7 +11,7 @@ services:
       placement:
         constraints: [node.labels.FE == true]
         preferences:
-          - spread: node.labels.FE
+
 # networks:
 #   ubuntu_default:
 #     external: true

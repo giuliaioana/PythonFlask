@@ -7,8 +7,6 @@ services:
     deploy:
       placement:
         constraints: [node.labels.FE == true]
-        preferences:
-          - spread: node.labels.FE
     image: giuliaioana/python_flask_app:latest
     ports: 
       - 5000:5000

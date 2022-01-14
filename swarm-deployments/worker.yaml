@@ -12,5 +12,4 @@ services:
     deploy:
       placement:
         constraints: [node.labels.FE == true]
-        preferences:
-          - spread: node.labels.FE
+

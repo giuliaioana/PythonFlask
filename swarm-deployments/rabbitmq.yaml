@@ -9,5 +9,4 @@ services:
     deploy:
       placement:
         constraints: [node.labels.BE == true]
-        preferences:
-          - spread: node.labels.BE
+
