@@ -10,7 +10,6 @@ services:
     deploy:
       placement:
         constraints: [node.labels.FE == true]
-        preferences:
 
 # networks:
 #   ubuntu_default:
