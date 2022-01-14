@@ -54,7 +54,7 @@ sudo docker swarm leave --force
 ```
 Deploy compose in stack:
 docker stack deploy --compose-file swarm-deployments/app.yaml appdemo && \
-docker stack deploy --compose-file swarm-deployments/worker.yaml appdemo && \
+docker stack deploy --compose-file swarm-deployments/worker.yaml workerdemo && \
 docker stack deploy --compose-file swarm-deployments/rabbitmq.yaml rabbitmqdemo && \
 docker stack deploy --compose-file swarm-deployments/mysql_adminer.yaml mysql_adminerdemo && \
 docker stack deploy --compose-file swarm-deployments/mysql.yaml mysqldemo 
