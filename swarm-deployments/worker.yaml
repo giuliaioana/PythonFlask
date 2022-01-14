@@ -2,7 +2,6 @@ version: '3.1'
 services: 
   
   worker:
-    name: worker
     image: giuliaioana/worker:latest
     volumes:
       - /home/ubuntu/PythonFlask/src/worker:/app
