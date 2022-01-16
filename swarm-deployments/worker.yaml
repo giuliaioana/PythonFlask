@@ -13,6 +13,6 @@ services:
         constraints: [node.labels.FE == true]
     secrets:
       - DB_PASSWORD
-  secrets:
-    DB_PASSWORD:
-      external: true
+secrets:
+  DB_PASSWORD:
+    external: true

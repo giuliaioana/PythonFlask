@@ -14,6 +14,6 @@ services:
       - /home/ubuntu/PythonFlask/src/main.py:/main.py:rw
     secrets:
       - DB_PASSWORD
-  secrets:
-    DB_PASSWORD:
-      external: true
+secrets:
+  DB_PASSWORD:
+    external: true
