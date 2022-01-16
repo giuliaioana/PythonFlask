@@ -7,11 +7,21 @@ import os
 
 hostname = "ip-172-31-6-119" if os.getenv("SWARM") else "mysql"
 rabitmq_host = "ip-172-31-6-119" if os.getenv("SWARM") else "rabbitmq"
+
+def get_db_password() -> str:
+    try:
+        db_password = open("/run/secrets/DB_PASSWORD", "r").read()
+    except Exception as error:
+        db_password = "admin"
+        pass
+    return db_password
+
+
 # Connect to the database
 def get_con():
     mysq_connection = pymysql.connect(host=hostname,
                                 user='admin',
-                                password='admin',
+                                password=str(get_db_password()),
                                 database='main',
                                 cursorclass=pymysql.cursors.DictCursor)
     return mysq_connection

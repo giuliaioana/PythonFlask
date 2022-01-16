@@ -10,6 +10,15 @@ import pika
 from flask_sqlalchemy import SQLAlchemy 
 from config import settings
 
+def get_db_password() -> str:
+    try:
+        db_password = open("/run/secrets/DB_PASSWORD", "r").read()
+    except Exception as error:
+        db_password = "admin"
+        pass
+    return db_password
+
+
 retry = 10
 while True:
     try:
@@ -21,7 +30,8 @@ while True:
 
         host= "ip-172-31-6-119" if os.getenv("SWARM") else settings.hostname
 
-        api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{settings.user}:{settings.password}@{host}/{settings.db}'
+        api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{settings.user}:{str(get_db_password())}@{host}/{settings.db}'
+    
         db = SQLAlchemy(api)
         class Products(db.Model):
             __tablename__='Products'
