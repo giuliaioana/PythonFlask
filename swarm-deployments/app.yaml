@@ -12,4 +12,8 @@ services:
       - 5000:5000
     volumes: 
       - /home/ubuntu/PythonFlask/src/main.py:/main.py:rw
-      #- ./src/settings.yaml:/settings.yaml:rw
+    secrets:
+      - DB_PASSWORD
+  secrets:
+    DB_PASSWORD:
+      external: true

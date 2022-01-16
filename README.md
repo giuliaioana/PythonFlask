@@ -52,6 +52,11 @@ sudo docker swarm leave --force
 ```
 
 ```
+Create docker secret:
+echo "admin" | docker secret create DB_PASSWORD -
+```
+
+```
 Deploy compose in stack:
 docker stack deploy --compose-file swarm-deployments/mysql.yaml mysql && \
 sleep 30 && \
@@ -98,11 +103,15 @@ Expected output:
 
 ### 6. Requests examples: 
 
+Request sent to RabbitMQ and processed by worker: 
+```
+curl -X POST -H "Content-Type: application/json" -d '{"ProductID": 1114,"ProductName": "pix", "Price": 10}' http://172.31.7.35:5000/add-job
+```
 ```
 /products/ - GET, POST
 
 GET: 
-curl localhost:5000/products
+curl 172.31.7.35:5000/products
 
 POST: 
 curl -X POST -H "Content-Type: application/json" -d '{"id": 4,"name": "pix", "price": "10"}' http://localhost:5000/products
