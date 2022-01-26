@@ -52,7 +52,7 @@ class Persons(db.Model):
 
 db.create_all()
 # RabbitMQ integration 
-break
+
 
 
 @api.route('/add-job', methods=['POST'])
