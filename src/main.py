@@ -25,7 +25,7 @@ rabitmq_host = "ip-172-31-6-119" if os.getenv("SWARM") else "rabbitmq"
 
 api = Flask(__name__)
 
-host= "ip-172-31-6-119" if os.getenv("SWARM") else settings.hostname
+host= "ip-172-31-6-119" #if os.getenv("SWARM") else settings.hostname
 
 api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{settings.user}:{str(get_db_password())}@{host}/{settings.db}'
 
