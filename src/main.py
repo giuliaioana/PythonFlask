@@ -27,7 +27,7 @@ api = Flask(__name__)
 
 host="ip-172-31-6-119"
 
-api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{settings.user}:{str(get_db_password())}@'+host+/{settings.db}'
+api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{settings.user}:{str(get_db_password())}@{host}/{settings.db}'
 
 db = SQLAlchemy(api)
 class Products(db.Model):
