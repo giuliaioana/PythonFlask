@@ -6,8 +6,8 @@ services:
     environment:
       ENV_FOR_DYNACONF: docker
       SWARM: "True"
-    volumes:
-      - /home/ubuntu/PythonFlask/src/worker:/app
+#     volumes:
+#       - /home/ubuntu/PythonFlask/src/worker:/app
     deploy:
       placement:
         constraints: [node.labels.FE == true]
