@@ -5,8 +5,8 @@ import json
 import pymysql.cursors
 import os
 
-hostname = "34.247.39.37" if os.getenv("SWARM") else "mysql"
-rabitmq_host = "34.247.39.37" if os.getenv("SWARM") else "rabbitmq"
+hostname = "34.247.39.37"
+rabitmq_host = "34.247.39.37"
 
 def get_db_password() -> str:
     try:
