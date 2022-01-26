@@ -7,7 +7,7 @@ services:
     deploy:
       placement:
         constraints: [node.labels.FE == true]
-    image: giuliaioana/python_flask_app:latest
+    image: giuliaioana/python_flask_app:1.1.2
     ports: 
       - 5000:5000
     secrets:
