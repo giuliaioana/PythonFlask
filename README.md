@@ -41,23 +41,23 @@ Start docker swarm:
 sudo docker swarm init --advertise-addr ip-172-31-4-85
 ```
 
+#### Check nodes 
 ```
-Check nodes:
 docker node ls
 ```
 
+#### Leave swarm at the begining
 ```
-Leave swarm at the begining:
 sudo docker swarm leave --force
 ```
 
+#### Create docker secret
 ```
-Create docker secret:
 echo "admin" | docker secret create DB_PASSWORD -
 ```
 
+#### Deploy compose in stack
 ```
-Deploy compose in stack:
 docker stack deploy --compose-file swarm-deployments/mysql.yaml mysql && \
 sleep 30 && \
 docker stack deploy --compose-file swarm-deployments/app.yaml app && \
@@ -66,18 +66,19 @@ docker stack deploy --compose-file swarm-deployments/rabbitmq.yaml rabbitmq && \
 docker stack deploy --compose-file swarm-deployments/mysql_adminer.yaml mysql_adminer
 ```
 
+#### Check docker compose status
+
 ```
-Check docker compose status:
 docker stack services stackdemo
 ```
 
+#### Remove docker stack
 ```
-Remove docker stack:
 docker stack rm stackdemo
 ```
 
+#### Add docker stack label
 ```
-Add docker stack label:
 docker node update --label-add BE=true ip-172-31-6-119
 docker node update --label-add FE=true ip-172-31-7-35
 ```
