@@ -31,7 +31,7 @@ print(' [*] Sleeping for ', sleepTime, ' seconds.')
 time.sleep(10)
 
 print(' [*] Connecting to server ...')
-connection = pika.BlockingConnection(pika.ConnectionParameters(host=rabitmq_host))
+connection = pika.BlockingConnection(pika.ConnectionParameters(host=hostname))
 channel = connection.channel()
 channel.queue_declare(queue='task_queue', durable=True)
 
