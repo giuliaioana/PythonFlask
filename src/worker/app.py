@@ -6,8 +6,7 @@ import json
 import pymysql.cursors
 import os
 
-hostname = "54.195.175.251"
-rabitmq_host = "54.195.175.251"
+hostname = "ip-172-31-42-104"
 
 def get_db_password() -> str:
     try:
