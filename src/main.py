@@ -19,47 +19,40 @@ def get_db_password() -> str:
     return db_password
 
 
-retry = 10
-while True:
-    try:
-        pymysql.install_as_MySQLdb()
+pymysql.install_as_MySQLdb()
 
-        rabitmq_host = "ip-172-31-6-119" if os.getenv("SWARM") else "rabbitmq"
+rabitmq_host = "ip-172-31-6-119" if os.getenv("SWARM") else "rabbitmq"
 
-        api = Flask(__name__)
+api = Flask(__name__)
 
-        host= "ip-172-31-6-119" if os.getenv("SWARM") else settings.hostname
+host= "ip-172-31-6-119" if os.getenv("SWARM") else settings.hostname
 
-        api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{settings.user}:{str(get_db_password())}@{host}/{settings.db}'
-    
-        db = SQLAlchemy(api)
-        class Products(db.Model):
-            __tablename__='Products'
-            ProductID = db.Column(db.Integer,primary_key=True)
-            ProductName = db.Column(db.String(64))
-            Price = db.Column(db.Integer,nullable=False)
-            #cartitems = db.relationship('Carts', backref='Products')
-            def __repr__(self):
-                return f'ProductName {self.ProductName}'
+api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{settings.user}:{str(get_db_password())}@{host}/{settings.db}'
 
-        class Carts(db.Model):
-            __tablename__='Carts'
-            ID = db.Column(db.Integer,primary_key=True)
-            PersonID = db.Column(db.Integer, db.ForeignKey('Persons.PersonID'))
-            ProductID = db.Column(db.Integer, db.ForeignKey('Products.ProductID'))
+db = SQLAlchemy(api)
+class Products(db.Model):
+    __tablename__='Products'
+    ProductID = db.Column(db.Integer,primary_key=True)
+    ProductName = db.Column(db.String(64))
+    Price = db.Column(db.Integer,nullable=False)
+    #cartitems = db.relationship('Carts', backref='Products')
+    def __repr__(self):
+        return f'ProductName {self.ProductName}'
 
-        class Persons(db.Model):
-            __tablename__='Persons'
-            PersonID = db.Column(db.Integer, primary_key=True)
-            LastName = db.Column(db.String(64))
+class Carts(db.Model):
+    __tablename__='Carts'
+    ID = db.Column(db.Integer,primary_key=True)
+    PersonID = db.Column(db.Integer, db.ForeignKey('Persons.PersonID'))
+    ProductID = db.Column(db.Integer, db.ForeignKey('Products.ProductID'))
 
-        db.create_all()
-        # RabbitMQ integration 
-        break
-    except BaseException as error:
-        print("Error when connectiong to DB")
-        time.sleep(retry*retry)
-        retry-=1
+class Persons(db.Model):
+    __tablename__='Persons'
+    PersonID = db.Column(db.Integer, primary_key=True)
+    LastName = db.Column(db.String(64))
+
+db.create_all()
+# RabbitMQ integration 
+break
 
 
 @api.route('/add-job', methods=['POST'])
