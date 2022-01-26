@@ -8,8 +8,8 @@ services:
       placement:
         constraints: [node.labels.FE == true]
     image: giuliaioana/python_flask_app:1.1.3
-#     volumes: 
-#       - /home/ubuntu/PythonFlask/src/main.py:/main.py:rw
+    volumes: 
+      - /home/ubuntu/PythonFlask/src/main.py:/main.py:rw
     ports: 
       - 5000:5000
     secrets:
