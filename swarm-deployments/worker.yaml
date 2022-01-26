@@ -3,8 +3,6 @@ services:
   
   worker:
     image: giuliaioana/worker:latest
-    volumes:
-      - /home/ubuntu/PythonFlask/src/worker:/app
     environment:
       ENV_FOR_DYNACONF: docker
       SWARM: "True"
