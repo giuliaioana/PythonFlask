@@ -2,7 +2,7 @@ version: '3.8'
 services: 
   
   worker:
-    image: giuliaioana/worker:1.1.11
+    image: giuliaioana/worker:1.1.12
     environment:
       ENV_FOR_DYNACONF: docker
       SWARM: "True"
