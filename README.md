@@ -66,7 +66,10 @@ docker stack deploy --compose-file swarm-deployments/rabbitmq.yaml rabbitmq && \
 docker stack deploy --compose-file swarm-deployments/mysql_adminer.yaml mysql_adminer
 ```
 
-#### Check docker compose status
+#### Check docker status
+```
+docker service ls (manager)
+```
 
 ```
 docker stack services stackdemo
