@@ -27,7 +27,9 @@ api = Flask(__name__)
 
 host="34.247.39.37" if os.getenv("SWARM") else settings.hostname
 
-api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{settings.user}:{str(get_db_password())}@{host}/{settings.db}'
+#api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{settings.user}:{str(get_db_password())}@{host}/{settings.db}'
+api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://admin:admin@34.247.39.37/main'
+
 
 db = SQLAlchemy(api)
 class Products(db.Model):
