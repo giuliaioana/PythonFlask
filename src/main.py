@@ -26,8 +26,8 @@ be_hostname = "54.195.175.251"
 api = Flask(__name__)
 
 print(f'mysql://{settings.user}:{str(get_db_password())}@{be_hostname}/{settings.db}')
-api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{settings.user}:{str(get_db_password())}@{be_hostname}/{settings.db}'
-#api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://admin:admin@34.247.39.37/main'
+#api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{settings.user}:{str(get_db_password())}@{be_hostname}/{settings.db}'
+api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://admin:admin@54.195.175.251/main'
 
 
 db = SQLAlchemy(api)
