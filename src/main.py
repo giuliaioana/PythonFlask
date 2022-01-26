@@ -21,14 +21,13 @@ def get_db_password() -> str:
 
 pymysql.install_as_MySQLdb()
 
-rabitmq_host = "ip-172-31-6-119" if os.getenv("SWARM") else "rabbitmq"
+be_hostname = "34.247.39.37"
 
 api = Flask(__name__)
 
-host="34.247.39.37" if os.getenv("SWARM") else settings.hostname
-
-#api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{settings.user}:{str(get_db_password())}@{host}/{settings.db}'
-api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://admin:admin@34.247.39.37/main'
+print(f'mysql://{settings.user}:{str(get_db_password())}@{be_hostname}/{settings.db}')
+api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://{settings.user}:{str(get_db_password())}@{be_hostname}/{settings.db}'
+#api.config['SQLALCHEMY_DATABASE_URI'] = f'mysql://admin:admin@34.247.39.37/main'
 
 
 db = SQLAlchemy(api)
