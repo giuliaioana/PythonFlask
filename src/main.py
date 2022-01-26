@@ -21,7 +21,7 @@ def get_db_password() -> str:
 
 pymysql.install_as_MySQLdb()
 
-be_hostname = "54.195.175.251"
+be_hostname = "ip-172-31-42-104"
 
 api = Flask(__name__)
 
