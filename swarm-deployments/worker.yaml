@@ -2,12 +2,10 @@ version: '3.8'
 services: 
   
   worker:
-    image: giuliaioana/worker:1.1.6
+    image: giuliaioana/worker:1.1.9
     environment:
       ENV_FOR_DYNACONF: docker
       SWARM: "True"
-#     volumes:
-#       - /home/ubuntu/PythonFlask/src/worker:/
     deploy:
       placement:
         constraints: [node.labels.FE == true]
