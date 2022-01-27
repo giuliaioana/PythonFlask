@@ -12,6 +12,16 @@ services:
       - 5000:5000
     secrets:
       - DB_PASSWORD
+  worker:
+    image: giuliaioana/worker:1.1.99
+    environment:
+      ENV_FOR_DYNACONF: docker
+      SWARM: "True"
+    deploy:
+      placement:
+        constraints: [node.labels.FE == true]
+    secrets:
+      - DB_PASSWORD
 secrets:
   DB_PASSWORD:
     external: true
